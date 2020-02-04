@@ -7,7 +7,7 @@ import (
 
 func InitRouter() (*gin.Engine, error) {
 	router := gin.Default()
-	router.LoadHTMLGlob("templates/*")
+	//router.LoadHTMLGlob("templates/*")
 	router.GET("/", indexPage)
 	return router, nil
 }

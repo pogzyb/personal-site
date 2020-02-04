@@ -3,6 +3,7 @@ package app
 import (
 	"github.com/gin-gonic/gin"
 	"html/template"
+	"log"
 )
 
 type (
@@ -39,5 +40,8 @@ func New() (app *Application, err error) {
 }
 
 func (app *Application) Start() {
-	app.Router.Run()
+	err := app.Router.Run()
+	if err != nil {
+		log.Fatalf("Could not run gin-engine! %s", err.Error())
+	}
 }
