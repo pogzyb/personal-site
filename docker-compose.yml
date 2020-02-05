@@ -11,11 +11,14 @@ services:
 
   web:
     build:
-      context: ""
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: build/Dockerfile
     environment:
-      - ACCESS_KEY_ID=
-      - ACCESS_SECRET_KEY=
+      - APP_ENV=development
+      - APP_PORT=8080
+      - TEMPLATES_DIR=
+      - ACCESS_KEY_ID=""
+      - ACCESS_SECRET_KEY=""
     env_file:
       - vars.env
     ports:
