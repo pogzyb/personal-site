@@ -1,4 +1,6 @@
 FROM golang:alpine3.10
 
+
+
 EXPOSE ${APP_PORT}
 ENTRYPOINT ${APP_HOME}/main
