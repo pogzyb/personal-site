@@ -2,17 +2,17 @@
 version: '3.5'
 
 services:
-  nginx:
-    build:
-      context: .
-      dockerfile: nginx/Dockerfile
-    ports:
-      - 80:80
+#  nginx:
+#    build:
+#      context: .
+#      dockerfile: nginx/Dockerfile
+#    ports:
+#      - 80:80
 
   web:
     build:
-      context: .
-      dockerfile: web/Dockerfile
+      context: ""
+      dockerfile: Dockerfile
     environment:
       - ACCESS_KEY_ID=
       - ACCESS_SECRET_KEY=

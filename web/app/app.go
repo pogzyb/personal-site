@@ -8,8 +8,8 @@ import (
 
 type (
 	Application struct {
-		Config *Config
-		Router *gin.Engine
+		Config    *Config
+		Router    *gin.Engine
 		Templates *template.Template
 	}
 
