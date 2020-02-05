@@ -1,17 +1,19 @@
 package app
 
 import (
-	"github.com/gin-gonic/gin"
+	"github.com/julienschmidt/httprouter"
+	"log"
 	"net/http"
 )
 
-func InitRouter() (*gin.Engine, error) {
-	router := gin.Default()
-	//router.LoadHTMLGlob("templates/*")
-	router.GET("/", indexPage)
-	return router, nil
+func InitRouter() *httprouter.Router {
+	router := httprouter.New()
+	return router
 }
 
-func indexPage(c *gin.Context) {
-	c.HTML(http.StatusOK, "index.html", gin.H{"name": "home"})
+func (app *Application) indexPage(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
+	index := app.Templates.Lookup("index.html")
+	if err := index.ExecuteTemplate(w, "index", page{}); err != nil {
+		log.Fatalf("Could not write response for 'index' page... %s", err.Error())
+	}
 }

@@ -1,38 +1,44 @@
 package app
 
 import (
-	"github.com/gin-gonic/gin"
+	"github.com/julienschmidt/httprouter"
 	"html/template"
-	"log"
+	"net/http"
+	"os"
 )
 
 type (
 	Application struct {
 		Config    *Config
-		Router    *gin.Engine
-		Templates *template.Template
+		Router    *httprouter.Router
+		Templates     *template.Template
 	}
 
-	//article struct {
-	//	Uid		string `json:"uid"`
-	//	Title	string `json:"title"`
-	//	Label	string `json:"label"`
-	//	DateStr	string `json:"date-string"`
-	//	Preview	template.HTML `json:"preview"`
-	//	Body	template.HTML `json:"body"`
-	//}
-	//
-	//page struct {
-	//	LoggedIn	bool
-	//	CurrentArt	*article
-	//	Articles 	[]*article
-	//}
+	article struct {
+		Uid		string `json:"uid"`
+		Title	string `json:"title"`
+		Label	string `json:"label"`
+		DateStr	string `json:"date-string"`
+		Preview	template.HTML `json:"preview"`
+		Body	template.HTML `json:"body"`
+	}
+
+	page struct {
+		LoggedIn	bool
+		CurrentArt	*article
+		Articles 	[]*article
+	}
 )
 
 func New() (app *Application, err error) {
 	app = &Application{}
+
+	app.Templates, err = InitTemplates()
 	app.Config, err = InitConfig()
-	app.Router, err = InitRouter()
+	app.Router = InitRouter()
+
+	app.Router.GET("/", app.indexPage)
+
 	if err != nil {
 		return nil, err
 	}
@@ -40,8 +46,5 @@ func New() (app *Application, err error) {
 }
 
 func (app *Application) Start() {
-	err := app.Router.Run()
-	if err != nil {
-		log.Fatalf("Could not run gin-engine! %s", err.Error())
-	}
+	_ = http.ListenAndServe(os.Getenv("APP_PORT"), app.Router)
 }

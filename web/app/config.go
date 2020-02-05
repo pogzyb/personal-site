@@ -6,11 +6,13 @@ import (
 )
 
 type Config struct {
-	SecretKey []byte
+	Environment	string
+	SecretKey 	[]byte
 }
 
 func InitConfig() (*Config, error) {
 	config := &Config{
+		Environment: os.Getenv("APP_ENV"),
 		SecretKey: []byte(os.Getenv("APP_SECRET")),
 	}
 	if len(config.SecretKey) == 0 {
