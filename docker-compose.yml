@@ -2,25 +2,27 @@
 version: '3.5'
 
 services:
-#  nginx:
-#    build:
-#      context: .
-#      dockerfile: nginx/Dockerfile
-#    ports:
-#      - 80:80
-
-  web:
+  personal-site-dev:
     build:
       context: .
-      dockerfile: build/Dockerfile
-    environment:
-      - APP_ENV=development
-      - APP_PORT=8080
-      - TEMPLATES_DIR=
-      - ACCESS_KEY_ID=""
-      - ACCESS_SECRET_KEY=""
+      dockerfile: build/dev/Dockerfile
+    container_name: personal-site-dev
     env_file:
       - vars.env
     ports:
-      - 8080:8080
-    command: ["./main"]
+      - '8080:8080'
+    volumes:
+      - './website/templates:/website/templates:z'
+      - './website/static:/website/static:z'
+      - './main.go:/website/main.go:z'
+      - './runner.conf:/website/runner.conf:z'
+
+#  personal-site-aws:
+#    build:
+#      context: .
+#      dockerfile: build/aws/Dockerfile
+#    container_name: personal-site-aws
+#    env_file:
+#      - vars.env
+#    ports:
+#      - '8080:8080'
