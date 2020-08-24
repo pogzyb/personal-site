@@ -1,0 +1,58 @@
+{{ define "projects" }}
+
+    <!DOCTYPE html>
+    <html lang="en">
+
+    {{template "head"}}
+
+    <body class="d-flex flex-column h-100">
+    <!-- Begin page content -->
+    <main role="main" class="flex-shrink-0">
+        <div class="container">
+            <div class="mt-3">
+                <p>JoeObarzanek.com</p>
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="/">Home</a></li>
+                        <li class="breadcrumb-item"><a href="/articles">Articles</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Projects</li>
+                        <li class="breadcrumb-item"><a href="/resume">Resume</a></li>
+                    </ol>
+                </nav>
+            </div>
+            <hr>
+            <div class="p-2">
+                <p class="lead mb-0">Various projects I can share ...</p>
+            </div>
+            <div class="card bg-light mt-3">
+                <div class="card-body">
+                    <h5 class="card-title"><a target="_blank" href="https://github.com/pogzyb/asyncwhois">asyncwhois<i class="ml-1 fas fa-code-branch"></i></a></h5>
+                    <h6 class="card-subtitle mb-2 text-muted">Async compatible python module for performing WHOIS queries for any domain</h6>
+                    <p class="card-text">
+                        A few Cyber Security related projects of mine required a Python friendly method of doing bulk WHOIS lookups.
+                        Existing tools and libraries didn't quite fit my use-case, so now I'm slowly crafting my own.
+                    </p>
+                </div>
+            </div>
+            <div class="card bg-light mt-3">
+                <div class="card-body">
+                    <h5 class="card-title"><a target="_blank" href="http://avantguardians.art">AvantGuardians<i class="ml-1 fas fa-external-link-alt"></i></a></h5>
+                    <h6 class="card-subtitle mb-2 text-muted">Freelance web development project for AvantGuardians LLC</h6>
+                    <p class="card-text">
+                        AvantGuardians is an art sharing platform where artists can connect, collaborate, and post their work.
+                        The founder contacted me with plans for creating a simple, cheap, and maintainable website. He mentioned other
+                        estimates for monthly costs were about $150-$300/month after a significant down payment.
+                        I was able to deliver a solution that utilizes Python's Flask web-framework as well as various
+                        AWS services such as SES, S3, RDS, and ECS for under $100/month.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </main>
+    {{template "footer"}}
+    {{template "js"}}
+    </body>
+
+    </html>
+
+{{ end }}

@@ -25,6 +25,9 @@ func NewSite() *Site {
 	}
 	site.Router.GET("/", site.index)
 	site.Router.GET("/resume", site.resume)
+	site.Router.GET("/projects", site.projects)
+	site.Router.GET("/articles", site.articles)
+	site.Router.GET("/article/:link", site.article)
 	return &site
 }
 
