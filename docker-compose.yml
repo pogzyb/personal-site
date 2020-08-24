@@ -14,6 +14,7 @@ services:
     volumes:
       - './website/templates:/website/templates:z'
       - './website/static:/website/static:z'
+      - './website/data:/website/data:z'
       - './main.go:/website/main.go:z'
       - './runner.conf:/website/runner.conf:z'
 
