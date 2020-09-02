@@ -1,0 +1,45 @@
+{{ define "article_03" }}
+
+    <!DOCTYPE html>
+    <html lang="en">
+
+    {{template "head"}}
+
+    <body class="d-flex flex-column h-100">
+    <!-- Begin page content -->
+    <main role="main" class="flex-shrink-0">
+        <div class="container">
+            <div class="mt-3">
+                <p>JoeObarzanek.com</p>
+                <nav aria-label="breadcrumb">
+                    <ol id="nav" class="breadcrumb bg-dark">
+                        <li class="breadcrumb-item"><a href="/">Home</a></li>
+                        <li class="breadcrumb-item"><a href="/articles">Articles</a></li>
+                        <li class="breadcrumb-item"><a href="/projects">Projects</a></li>
+                        <li class="breadcrumb-item"><a href="/resume">Resume</a></li>
+                    </ol>
+                </nav>
+            </div>
+            <hr>
+            <!-- Begin article -->
+            <div class="text-center">
+                <p class="lead title">Simple Rotating Packet Captures with Go</p>
+                <img alt="go_packet_captures" src="../static/img/articles/jobarzanek_go_packet_captures.png">
+            </div>
+            <div class="mt-2 mb-5">
+                <div class="bg-light rounded">
+                    <p class="text-muted p-2">October 10, 2020<span class="float-right">~5 min</span></p>
+                </div>
+                <p class="mb-0 lead heading">I. Preface</p>
+                <p>
+                    The worlds of Cyber Security and Big Data have been on a collision course since the early days.
+                    
+                </p>
+            </div>
+        </div>
+    </main>
+
+    {{template "js"}}
+    </body>
+    </html>
+{{ end }}
