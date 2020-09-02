@@ -13,10 +13,10 @@
                 <p class="mt-5" style="font-size: 3.0rem; margin-bottom: 0;">
                     Joe Obarzanek
                 </p>
-                <img alt="This is me." class="mt-3 ml-auto img-responsive rounded" src="../static/img/profile/me.jpg" style="width:150px;">
+                <img alt="This is me." class="mt-3 ml-auto img-responsive rounded-circle" src="../static/img/profile/me.jpg" style="width:150px;">
             </div>
             <nav aria-label="breadcrumb">
-                <ol class="breadcrumb">
+                <ol id="nav" class="breadcrumb bg-dark">
                     <li class="breadcrumb-item active" aria-current="page">Home</li>
                     <li class="breadcrumb-item"><a href="/articles">Articles</a></li>
                     <li class="breadcrumb-item"><a href="/projects">Projects</a></li>
@@ -27,8 +27,9 @@
             <div class="p-1">
                 <p class="card-text">
                     <strong>About me:</strong><br>
-                    I'm a Software Engineer, Open Source Contributor, Data Science Enthusiast, and Certified AWS Solutions Architect Associate.
-                    I enjoy designing and implementing Big Data and Machine Learning solutions using tools like Python, Go, AWS services, and Apache Open Source Projects.
+                    My titles include Software Engineer, Open Source Contributor, Data Science Enthusiast, and
+                    Certified AWS Solutions Architect Associate. I enjoy designing and implementing Big Data and Machine
+                    Learning solutions using tools like Python, Go, AWS services, and Apache Open Source Projects.
                     I currently work in the financial industry on everything from information security and fraud detection
                     to credit lending and customer segmentation systems.
                 </p>
@@ -43,7 +44,8 @@
             <p class="lead">Some things I've written about recently...</p>
             <div class="mt-3 alert alert-lighter">
                     <a href="/article/{{ (index .AllArticles 0).Link }}">
-                        <i class="mr-2 far fa-images"></i>PyTesseract: multithreading vs multiprocessing <span class="float-right text-muted"><small>7/14/2020</small></span>
+                        <i class="mr-2 far fa-images"></i>{{ (index .AllArticles 0).Title }} <span class="float-right text-muted">
+                            <small>{{ (index .AllArticles 0).Date }}</small></span>
                     </a>
             </div>
         </div>
