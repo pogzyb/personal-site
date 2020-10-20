@@ -1,0 +1,31 @@
+{
+  "articles": [
+    {
+      "title": "PyTesseract: threading vs multiprocessing",
+      "path": "pytesseract_threading_vs_multiprocessing",
+      "date": "2020-09-23T00:00:00.000Z",
+      "template": "article_02",
+      "html_template": "article_02.html",
+      "fa_icon": "far fa-images",
+      "front_page": true
+    },
+    {
+      "title": "Deploy Flask Apps into AWS ECS with Terraform",
+      "path": "deploy_flask_into_aws_ecs_with_terraform",
+      "date": "2020-09-23T00:00:00.000Z",
+      "template": "article_01",
+      "html_template": "article_01.html",
+      "fa_icon": "far fa-images",
+      "front_page": false
+    },
+    {
+      "title": "Simple Rotating Packet Captures with Go",
+      "path": "simple_rotating_pcaps_with_golang",
+      "date": "2020-09-23T00:00:00.000Z",
+      "template": "article_03",
+      "html_template": "article_03.html",
+      "fa_icon": "far fa-images",
+      "front_page": false
+    }
+  ]
+}

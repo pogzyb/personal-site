@@ -6,7 +6,7 @@ ENV CODE_REPO=${USERNAME}/website
 COPY website /go/src/${CODE_REPO}
 WORKDIR /go/src/${CODE_REPO}
 
-RUN apk add git && go get -v ./...
+RUN apk add git build-base && go get gorm.io/gorm && go get -v ./...
 RUN go get github.com/pilu/fresh
 
 COPY website/templates /website/templates

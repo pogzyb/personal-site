@@ -25,10 +25,6 @@
             color: #3a4f63 !important;
         }
 
-        ol#nav li a {
-            color: #fff !important;
-        }
-
         footer {
             position: absolute;
             bottom: 0;
@@ -51,10 +47,35 @@
         }
 
         .heading {
-            text-decoration: underline;
             font-size: 18px;
         }
 
+        .navbar-nav > li {
+            float: left;
+            position: relative;
+        }
+
+        .navbar-light .navbar-nav .active a::after {
+            border-bottom: 5px solid #3a4f63;
+            bottom: -7.5px;
+            content: " ";
+            left: 0;
+            position: absolute;
+            right: 0;
+        }
+
+        .aws-badge {
+            height: 22px;
+            padding-bottom: 4px;
+        }
+
+        .profile-img-main {
+            width:110px;
+        }
+
+        .center {
+            margin: auto;
+        }
     </style>
 </head>
 {{ end }}

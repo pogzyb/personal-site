@@ -17,17 +17,15 @@ type Site struct {
 }
 
 func NewSite() *Site {
-	router := initRouter()
-	templates := initTemplates()
 	site := Site{
-		Router:    router,
-		Templates: templates,
+		Router:    initRouter(),
+		Templates: initTemplates(),
 	}
 	site.Router.GET("/", site.index)
 	site.Router.GET("/resume", site.resume)
 	site.Router.GET("/projects", site.projects)
 	site.Router.GET("/articles", site.articles)
-	site.Router.GET("/article/:link", site.article)
+	//site.Router.GET("/article/:link", site.article)
 	return &site
 }
 
@@ -45,15 +43,14 @@ func initTemplates() *template.Template {
 	// read and parse template files
 	files, err := ioutil.ReadDir(templatesDir)
 	if err != nil {
-		log.Fatalf("Could not read from $TEMPLATES_DIR [%s]...\n%s", templatesDir, err.Error())
+		log.Fatalf("could not read from $TEMPLATES_DIR [%s]: %v", templatesDir, err)
 	}
 	for _, file := range files {
 		templateFiles = append(templateFiles, path.Join(templatesDir, file.Name()))
 	}
 	templates, err := template.ParseFiles(templateFiles...)
 	if err != nil {
-		log.Fatalf("Could not parse html templates...\n%s", err.Error())
+		log.Fatalf("could not parse html templates: %v", err)
 	}
-
 	return templates
 }
