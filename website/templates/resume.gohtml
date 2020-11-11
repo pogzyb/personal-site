@@ -1,17 +1,38 @@
-{{ define "resume" }}
+{{ define "resume"}}
 
-    <!DOCTYPE html>
-    <html lang="en">
+<!DOCTYPE html>
+<html lang="en">
 
-    {{template "head"}}
+{{template "head" .}}
 
-    <body class="d-flex flex-column h-100">
+<body class="d-flex flex-column h-100">
     <!-- Begin page content -->
-    <main role="main" class="container w-100">
-        <div class="my-3 p-3 bg-white rounded box-shadow-sm">
+    <main role="main" class="container w-100 mt-3">
+        <p>JoeObarzanek.com <span class="float-right">... {{ .Title }}</span></p>
+        <nav class="navbar navbar-expand-lg navbar-light bg-light rounded">
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navBarShrink" aria-controls="navBarShrink" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navBarShrink">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/articles">Articles</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/projects">Projects</a>
+                    </li>
+                    <li class="nav-item active">
+                        <a class="nav-link" href="/resume">Resume</a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+        <div class="my-3 p-3 rounded border">
             <!-- Header -->
             <p class="text-dark text-center" style="font-size: 2.0rem; margin-bottom: 0;">
-                <a href="/"><i class="mt-2 float-left fas fa-angle-double-left"></i></a>
                 Joe Obarzanek
             </p>
             <p class="text-center text-muted"><small>pogzyb@umich.edu · Ann Arbor, Michigan · github.com/pogzyb</small></p>
@@ -64,27 +85,29 @@
                     </div>
                     <span class="d-block">2017 — Present</span>
                     <div style="margin-top: 5px" class="collapse" id="cma-info-collapse">
-                        <strong class="text-gray-dark">Technology & Engineering Collective Program (TEC Engineer)</strong>
-                        <p style="margin-bottom: 3px;">The "TEC" program consists of three 8 month rotations within Comerica Bank’s various technology departments</p>
-                        <ul style="padding-left: 5px;">
-                            <li><strong class="text-gray-dark">Digital Marketing Software Engineer</strong></li>
-                            <ul>
-                                <li>Develop a full-stack web application aimed at identifying and tracking online promotional offers</li>
-                                <li>Utilize Python's Flask web framework, Terraform, and AWS Services to build a containerized, cloud-native application</li>
-                                <li>Work with marketing teams and other developers to create and adjust application features in order to meet evolving requirements</li>
-                            </ul>
-                            <li><strong class="text-gray-dark">Enterprise Data Lake Engineer</strong></li>
-                            <ul>
-                                <li>Leverage PySpark, Apache Airflow, and AWS Glue to build scalable, robust, and re-usable big data pipelines</li>
-                                <li>Develop Python API services to query and document metadata from various internal banking mainframe databases</li>
-                                <li>Utilize Terraform and IaC best practices to deploy various applications into AWS' Elastic Container Service</li>
-                            </ul>
-                            <li><strong class="text-gray-dark">Cyber Security Data Analyst</strong></li>
-                            <ul>
-                                <li>Parse terabytes of network data to identify potential information security threats using ad-hoc PySpark</li>
-                                <li>Put together simplified reports using Jupyter Notebooks to be shared with Security Management and Audit teams</li>
-                                <li>Work with Fraud Analysts to build re-usable </li>
-                            </ul>
+                        <strong class="text-gray-dark">Digital Marketing Software Engineer</strong>
+                        <ul>
+                            <li>Develop a full-stack web application aimed at identifying, tracking, and rewarding customers enrolled in online promotional offers</li>
+                            <li>Utilize Python's Flask web framework, Apache Airflow, and AWS Services to build a highly visible, end-to-end Data Pipeline</li>
+                            <li>Work with marketing teams and other developers to create and adjust application features in order to meet evolving requirements</li>
+                        </ul>
+                        <strong class="text-gray-dark">Financial Spreading Software Engineer</strong>
+                        <ul>
+                            <li>Contribute to a project aimed at automating the bank's Financial Spreading process by leveraging advanced Deep Learning and Optical Character Recognition techniques</li>
+                            <li>Write highly optimized Python code to efficiently process customer financial data extracted from large PDF documents</li>
+                            <li>Regularly meet with Business Partners and Lead Users to document feedback, address application issues, and deliver features</li>
+                        </ul>
+                        <strong class="text-gray-dark">Enterprise Data Lake Engineer</strong>
+                        <ul>
+                            <li>Leverage Apache Airflow and AWS Services such as Lambda, SNS, and Glue to build scalable, robust, and re-usable Big Data Pipelines</li>
+                            <li>Develop Python microservices to insert, query, and update metadata from various internal banking mainframe databases</li>
+                            <li>Utilize Terraform and IaC best practices to deploy various containerized applications into AWS' Elastic Container Service</li>
+                        </ul>
+                        <strong class="text-gray-dark">Cyber Security Data Analyst</strong>
+                        <ul>
+                            <li>Parse terabytes of corporate network traffic to identify information security threats using anomaly detection methods with PySpark</li>
+                            <li>Perform operational reporting duties including preparing statistical reports to be shared with Security Management and Audit teams</li>
+                            <li>Work closely with internal and external Information Security Experts and Threat Hunters to quickly act on pieces of cyber intelligence</li>
                         </ul>
                     </div>
                 </div>
@@ -102,10 +125,10 @@
                     <div style="margin-top: 5px" class="collapse" id="sm-info-collapse">
                         <strong class="text-gray-dark">Junior Data Analyst Co-op</strong>
                         <ul>
-                            <li>Develop Python API services to efficiently stream IoT machine data feeds in and out of an Elasticsearch Cluster</li>
+                            <li>Develop Python microservices to efficiently stream IoT machine data feeds into Elasticsearch</li>
                             <li>Extract, transform, and analyze machine log data using various Python libraries such as Pandas, NumPy, Matplotlib, and Scikit-Learn</li>
-                            <li>Apply Machine Learning Regression techniques to proactively forecast and label various assembly-line outcomes</li>
-                            <li>Communicate findings to management and data analysts using Jupyter Notebooks and Kibana</li>
+                            <li>Apply Machine Learning Regression techniques to proactively forecast and label various factory assembly-line outcomes</li>
+                            <li>Communicate findings to management and data analysts using visualizations and tables within Jupyter Notebooks and Kibana</li>
                         </ul>
                     </div>
                 </div>
@@ -144,7 +167,7 @@
                     <div style="margin-top: 5px" class="collapse" id="honors-info-collapse">
                         <ul>
                             <li>University of Michigan Honor Roll & Dean’s List recipient – Fall ’15 and Winter ’14, ’16, ‘17</li>
-                            <li>Eagle Scout – Independently organized and completed a food drive benefiting the Capuchin Soup Kitchen in Detroit, MI</li>
+                            <li>Eagle Scout – Independently organized and carried out a food drive benefiting the Capuchin Soup Kitchen in Detroit, MI</li>
                             <li>Multi-time Red Cross Volunteer in Flint, MI distributing bottled water, brita filters, and collecting neighborhood data</li>
                             <li>Elected Vice President of Kappa Omega Alpha the Premiere Pre-Law Fraternity at the University of Michigan</li>
                             <li>(<img alt="aws-badge" class="aws-badge" src="../static/img/resume/aws-certified.png">) Cloud Solutions Architect Associate 2020</li>
@@ -152,6 +175,7 @@
                     </div>
                 </div>
             </div>
+            <!--
             <div class="media text-muted pt-3">
                 <img alt="term" class="mr-2 rounded" src="../static/img/resume/terminal.png" width="32" height="32">
                 <div class="media-body pb-3 mb-0 small lh-125 border-bottom border-gray">
@@ -205,12 +229,33 @@
                     </div>
                 </div>
             </div>
+            <ul style="padding-left: 5px;">
+                            <li><strong class="text-gray-dark">Digital Marketing Software Engineer</strong></li>
+                            <ul>
+                                <li>Develop a full-stack web application aimed at identifying and tracking online promotional offers</li>
+                                <li>Utilize Python's Flask web framework, Terraform, and AWS Services to build a containerized, cloud-native application</li>
+                                <li>Work with marketing teams and other developers to create and adjust application features in order to meet evolving requirements</li>
+                            </ul>
+                            <li><strong class="text-gray-dark">Enterprise Data Lake Engineer</strong></li>
+                            <ul>
+                                <li>Leverage PySpark, Apache Airflow, and AWS Glue to build scalable, robust, and re-usable big data pipelines</li>
+                                <li>Develop Python API services to query and document metadata from various internal banking mainframe databases</li>
+                                <li>Utilize Terraform and IaC best practices to deploy various applications into AWS' Elastic Container Service</li>
+                            </ul>
+                            <li><strong class="text-gray-dark">Cyber Security Data Analyst</strong></li>
+                            <ul>
+                                <li>Parse terabytes of network data to identify potential information security threats using ad-hoc PySpark</li>
+                                <li>Put together simplified reports using Jupyter Notebooks to be shared with Security Management and Audit teams</li>
+                                <li>Work with Fraud Analysts to build re-usable </li>
+                            </ul>
+                        </ul>
+            -->
             <br>
         </div>
     </main>
-
+    {{template "footer"}}
     {{template "js"}}
-    </body>
+</body>
 
     </html>
 
