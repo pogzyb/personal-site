@@ -1,0 +1,39 @@
+{
+  "projects": [
+    {
+      "title": "asyncwhois",
+      "fa_icon": "fas fa-globe",
+      "description": "asyncio compatible WHOIS module for Python",
+      "body": "",
+      "link": "https://github.com/pogzyb/asyncwhois"
+    },
+    {
+      "title": "deep.surf",
+      "fa_icon": "fas fa-fish",
+      "description": "Machine Learning API for Real-time Phishing Detection",
+      "body": "Cybersecurity and Data Science mash-up that aims to predict whether a given website is a phish or not. After carefully extracting features from HTML tags, Network traffic, and WHOIS queries, an XGBoost model was trained on a dataset of over 100k URLs. This model is hosted using AWS SageMaker Endpoint Service.",
+      "link": "https://deep.surf"
+    },
+    {
+      "title": "Deploying Flask apps into AWS ECS with Terraform",
+      "fa_icon": "fas fa-cloud-upload-alt",
+      "description": "Tutorial for deploying containerized apps into AWS using the IaC tool, Terraform",
+      "body": "",
+      "link": "https://github.com/pogzyb/deploy-flask-into-aws-with-terraform"
+    },
+    {
+      "title": "PySpark 101: Capital BikeShare",
+      "fa_icon": "fas fa-bicycle",
+      "description": "Data Science project utilizing AWS EMR and PySpark ML",
+      "body": "",
+      "link": "https://github.com/pogzyb/pyspark-aws-example"
+    },
+    {
+      "title": "Project for AvantGuardians LLC",
+      "fa_icon": "fas fa-pencil-ruler",
+      "description": "Freelance web development project for AvantGuardians LLC",
+      "body": "AvantGuardians is an art sharing platform where artists can connect, collaborate, and post their work. The founder contacted me with plans for creating a simple, cheap, and maintainable website. He mentioned other estimates for monthly costs were about $150-$300/month after a significant down payment. I was able to deliver a solution that utilizes Python's Flask web-framework as well as various AWS services such as SES, S3, RDS, and ECS for $50/month.",
+      "link": "https://avantguardians.art"
+    }
+  ]
+}

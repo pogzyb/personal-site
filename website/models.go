@@ -28,19 +28,23 @@ type (
 		HTMLTemplate	string		`json:"html_template"`
 		FAIcon			string		`json:"fa_icon"`
 	}
-)
 
-func init() {
-	initDatabase()
-	migrateDatabase()
-	initTableIfEmpty()
-}
+	Project struct {
+		ID				uint		`gorm:"primaryKey"`
+		Title			string		`json:"title"`
+		FAIcon			string		`json:"fa_icon"`
+		Description		string		`json:"description"`
+		Body			string		`json:"body"`
+		Link			string		`json:"link"`
+	}
+)
 
 func initDatabase() *gorm.DB {
 	once.Do(func() {
 		var err error
 		dbName := os.Getenv("DATABASE_NAME")
-		database, err = gorm.Open(sqlite.Open("/website/data/" + dbName), &gorm.Config{})
+		dbDir := os.Getenv("APP_HOME") + "/data"
+		database, err = gorm.Open(sqlite.Open(path.Join(dbDir, dbName)), &gorm.Config{})
 		if err != nil {
 			log.Fatalf("could not connect to %s: %v", dbName, err)
 		}
@@ -50,16 +54,15 @@ func initDatabase() *gorm.DB {
 }
 
 func migrateDatabase() {
-	err := database.AutoMigrate(&Article{})
+	err := database.AutoMigrate(&Article{}, &Project{})
 	if err != nil {
 		log.Fatalf("could not run gorm schema migrations: %v", err)
 	}
-	//err = initTableIfEmpty(); if err != nil {
-	//	log.Fatalf("could not initialize table: %v", err)
-	//}
+	populateArticles()
+	populateProjects()
 }
 
-func initTableIfEmpty() {
+func populateArticles() {
 	// check if database is empty
 	var article Article
 	result := database.First(&article)
@@ -71,10 +74,10 @@ func initTableIfEmpty() {
 		}{}
 		// read in data/articles.json file
 		cwd, _ := os.Getwd()
-		pathToJSON := path.Join(cwd, "data/articles.json")
-		f, err := os.Open(pathToJSON)
+		jsonFile := path.Join(cwd, "data/articles.json")
+		f, err := os.Open(jsonFile)
 		if err != nil {
-			log.Fatalf("could not open json file [%s]: %v", pathToJSON, err)
+			log.Fatalf("could not open json file [%s]: %v", jsonFile, err)
 		}
 		defer f.Close()
 		// marshal the results into "data", which is a slice of "Article" types
@@ -91,3 +94,34 @@ func initTableIfEmpty() {
 	}
 }
 
+func populateProjects() {
+	// check if database is empty
+	var project Project
+	result := database.First(&project)
+
+	if result.RowsAffected == 0 {
+		// struct for marshalling the "articles" json file
+		var data = struct {
+			Projects []Project `json:"projects"`
+		}{}
+		// read in data/projects.json file
+		cwd, _ := os.Getwd()
+		jsonFile := path.Join(cwd, "data/projects.json")
+		f, err := os.Open(jsonFile)
+		if err != nil {
+			log.Fatalf("could not open json file [%s]: %v", jsonFile, err)
+		}
+		defer f.Close()
+		// marshal the results into "data", which is a slice of "Project" types
+		j, _ := ioutil.ReadAll(f)
+		err = json.Unmarshal(j, &data);
+		if err != nil {
+			log.Fatalf("could not unmarhsall json: %v", err)
+		}
+		// insert each article into database
+		for _, project := range data.Projects {
+			database.Create(&project)
+			log.Printf("successfully inserted project: %s", project.Title)
+		}
+	}
+}
