@@ -1,96 +1,97 @@
 package website
 
 import (
-	"encoding/json"
-	"errors"
 	"fmt"
-	"io/ioutil"
+	"github.com/julienschmidt/httprouter"
+	"html/template"
 	"log"
 	"net/http"
-	"os"
-	"path"
-
-	"github.com/julienschmidt/httprouter"
+	"runtime/debug"
+	"time"
 )
-
-// simple data storage for articles
-var ArticleStorage Articles
 
 type (
-	Article struct {
-		Title			string `json:"title"`
-		Link			string `json:"link"`
-		TmplName		string `json:"template"`
-		HTMLTmplName	string `json:"html_template"`
-		Date			string `json:"date"`
-		FrontPage		bool   `json:"front_page"`
-	}
+	Articles []Article
+	Projects []Project
 
-	Articles struct {
-		AllArticles []Article `json:"articles"`
+	Page struct {
+		Title		string
+		Articles
+		Projects
 	}
 )
 
-// read article data from json file before starting the app
-func init()  {
-	cwd, _ := os.Getwd()
-	pathToJSON := path.Join(cwd, "data/articles.json")
-	f, err := os.Open(pathToJSON)
-	if err != nil {
-		log.Fatalf("Could not open json file [%s]\n%s", pathToJSON, err)
-	}
-	defer f.Close()
-	j, _ := ioutil.ReadAll(f)
-	err = json.Unmarshal(j, &ArticleStorage); if err != nil {
-		log.Fatalf("Could not unmarhsall json!\n%s", err)
+func NotFoundHandler(w http.ResponseWriter, r *http.Request) {
+	page := Page{ Title: "404 Error" }
+	notFoundTmpl := templates.Lookup("404.gohtml")
+	if err := notFoundTmpl.ExecuteTemplate(w, "404", page); err != nil {
+		log.Fatalf("Could not write response for '404' page: %v", err)
 	}
 }
 
-func getArticleByLink(link string) (Article, error) {
-	for _, article := range ArticleStorage.AllArticles {
-		if link == article.Link {
-			return article, nil
-		}
+func InternalServerError(w http.ResponseWriter, r *http.Request, err interface{}) {
+	subject := fmt.Sprintf("500 Error [%s]", time.Now().Format(time.RFC822))
+	serverErr := err.(error)
+	stack := string(debug.Stack())
+	sendEmail(subject, serverErr, stack)
+	page := Page{ Title: "500 Error" }
+	internalServerErrorTmpl := templates.Lookup("500.gohtml")
+	if err := internalServerErrorTmpl.ExecuteTemplate(w, "500", page); err != nil {
+		log.Fatalf("Could not write response for '500' page: %v", err)
 	}
-	return Article{}, errors.New(fmt.Sprintf("No article for link: %s", link))
 }
 
 func (s Site) index(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
-	index := s.Templates.Lookup("index.gohtml")
-	if err := index.ExecuteTemplate(w, "index", ArticleStorage); err != nil {
-		log.Fatalf("Could not write response for 'index' page... %s", err.Error())
+	indexTmpl := templates.Lookup("index.gohtml")
+	page := Page{ Title: "Home" }
+	if err := indexTmpl.ExecuteTemplate(w, "index", page); err != nil {
+		log.Fatalf("Could not write response for 'index' page: %v", err)
 	}
 }
 
 func (s Site) resume(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
-	resume := s.Templates.Lookup("resume.gohtml")
-	if err := resume.ExecuteTemplate(w, "resume", nil); err != nil {
-		log.Fatalf("Could not write response for 'resume' page... %s", err.Error())
+	resumeTmpl := templates.Lookup("resume.gohtml")
+	page := Page{ Title: "Resume" }
+	if err := resumeTmpl.ExecuteTemplate(w, "resume", page); err != nil {
+		log.Fatalf("could not write response for 'resume' page: %v", err)
 	}
 }
 
 func (s Site) projects(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
-	resume := s.Templates.Lookup("projects.gohtml")
-	if err := resume.ExecuteTemplate(w, "projects", nil); err != nil {
-		log.Fatalf("Could not write response for 'projects' page... %s", err.Error())
+	var allProjects Projects
+	queryResult := database.Find(&allProjects)
+	if queryResult.Error != nil {
+		log.Printf("could not query projects: %v", queryResult.Error)
+	}
+	projectsTmpl := templates.Lookup("projects.gohtml")
+	page := Page{ Title: "Projects", Projects: allProjects }
+	if err := projectsTmpl.ExecuteTemplate(w, "projects", page); err != nil {
+		log.Fatalf("could not write response for 'projects' page: %v", err)
 	}
 }
 
 func (s Site) articles(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
-	resume := s.Templates.Lookup("articles.gohtml")
-	if err := resume.ExecuteTemplate(w, "articles", ArticleStorage); err != nil {
-		log.Fatalf("Could not write response for 'resume' page... %s", err.Error())
+	var allArticles Articles
+	queryResult := database.Find(&allArticles)
+	if queryResult.Error != nil {
+		log.Printf("could not query articles: %v", queryResult.Error)
+	}
+	articlesTmpl := templates.Lookup("articles.gohtml")
+	page := Page{ Title: "Articles", Articles: allArticles }
+	if err := articlesTmpl.ExecuteTemplate(w, "articles", page); err != nil {
+		log.Fatalf("could not write response for 'articles' page: %v", err)
 	}
 }
 
 func (s Site) article(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
-	link := ps.ByName("link")
-	a, err := getArticleByLink(link)
-	if err != nil {
-		log.Fatal(err)
+	var oneArticle Article
+	path := ps.ByName("articlePath")
+	queryResult := database.Where("path = ?", path).First(&oneArticle)
+	if queryResult.Error != nil {
+		log.Printf("could not query article: %s: %v", path, queryResult.Error)
 	}
-	article := s.Templates.Lookup(a.TmplName)
-	if err := article.ExecuteTemplate(w, a.TmplName, nil); err != nil {
-		log.Fatalf("Could not write response for 'resume' page... %s", err.Error())
+	articleTmpl := templates.Lookup(oneArticle.HTMLTemplate)
+	if err := articleTmpl.ExecuteTemplate(w, oneArticle.Template, oneArticle); err != nil {
+		log.Fatalf("Could not write response for 'article' %s: %v", oneArticle.Title, err)
 	}
 }

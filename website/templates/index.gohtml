@@ -3,49 +3,63 @@
 <!DOCTYPE html>
 <html lang="en">
 
-{{template "head"}}
+{{template "head" .}}
 
 <body class="d-flex flex-column h-100">
     <!-- Begin page content -->
     <main role="main" class="flex-shrink-0">
         <div class="container">
-            <div class="mt-3 mb-3 d-flex flex-row">
-                <p class="mt-5" style="font-size: 3.0rem; margin-bottom: 0;">
-                    Joe Obarzanek
-                </p>
-                <img alt="This is me." class="mt-3 ml-auto img-responsive rounded" src="../static/img/profile/me.jpg" style="width:150px;">
+            <div class="mt-3 mb-3 media bg-light rounded">
+                <img alt="This is me." class="profile-img-main float-left img-responsive rounded" src="../static/img/profile/joe.jpg">
+                <div class="media-body center">
+                    <h1 class="ml-3 mb-0">Joe Obarzanek</h1>
+                    <p class="ml-3 mb-0">Personal Website · Tech Blog · Portfolio Space</p>
+                </div>
             </div>
-            <nav aria-label="breadcrumb">
-                <ol class="breadcrumb">
-                    <li class="breadcrumb-item active" aria-current="page">Home</li>
-                    <li class="breadcrumb-item"><a href="/articles">Articles</a></li>
-                    <li class="breadcrumb-item"><a href="/projects">Projects</a></li>
-                    <li class="breadcrumb-item"><a href="/resume">Resume</a></li>
-                </ol>
+            <nav class="navbar navbar-expand-lg navbar-light bg-light rounded">
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navBarShrink" aria-controls="navBarShrink" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navBarShrink">
+                    <ul class="navbar-nav mr-auto">
+                        <li class="nav-item active">
+                            <a class="nav-link" href="/">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/articles">Articles</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/projects">Projects</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/resume">Resume</a>
+                        </li>
+                    </ul>
+                </div>
             </nav>
-            <p class="lead">Hello. Welcome to my place on the internet.</p>
+            <hr>
+            <h5 class="mt-4">Hello! Welcome to my place on the internet.</h5>
             <div class="p-1">
                 <p class="card-text">
+                    <strong>Self described:</strong><br>
+                    <u>Experienced Software Engineer</u>, <u>Data Science Enthusiast</u>, <u>Avid Open Source Contributor</u>, and
+                    <img alt="aws-badge" class="aws-badge" src="../static/img/resume/aws-certified.png"> <u>Cloud Solutions Architect Associate</u>.
+                </p>
+                <p>
                     <strong>About me:</strong><br>
-                    I'm a Software Engineer, Open Source Contributor, Data Science Enthusiast, and Certified AWS Solutions Architect Associate.
-                    I enjoy designing and implementing Big Data and Machine Learning solutions using tools like Python, Go, AWS services, and Apache Open Source Projects.
+                    I enjoy designing and implementing Big Data and Machine
+                    Learning solutions using tools like Python, Go, AWS services, and Apache Open Source Projects.
                     I currently work in the financial industry on everything from information security and fraud detection
                     to credit lending and customer segmentation systems.
                 </p>
                 <p class="card-text">
-                    <strong>Find me here: </strong>
+                    <strong>Contact me: </strong>
                     <a class="ml-2 mr-2" style="font-size: 20px;" target="_blank" href="https://github.com/pogzyb/"><i class="fab fa-github-alt"></i></a>
                     <a class="mr-2" style="font-size: 20px;" target="_blank" href="https://lichess.org/@/bobbyferguson"><i class="fas fa-chess-knight"></i></a>
                     <a class="mr-2" style="font-size: 20px;" href=""><i class="fas fa-envelope"></i></a>
                 </p>
             </div>
             <hr>
-            <p class="lead">Some things I've written about recently...</p>
-            <div class="mt-3 alert alert-lighter">
-                    <a href="/article/{{ (index .AllArticles 0).Link }}">
-                        <i class="mr-2 far fa-images"></i>PyTesseract: multithreading vs multiprocessing <span class="float-right text-muted"><small>7/14/2020</small></span>
-                    </a>
-            </div>
         </div>
     </main>
     {{template "footer"}}

@@ -12,6 +12,6 @@ import (
 func main() {
 	site := website.NewSite()
 	port := fmt.Sprintf(":%s", os.Getenv("PORT"))
-	log.Printf("Starting server on %s", port)
+	log.Printf("starting server on %s\n", port)
 	log.Fatal(http.ListenAndServe(port, site.Router))
 }

@@ -3,102 +3,116 @@
     <!DOCTYPE html>
     <html lang="en">
 
-    {{template "head"}}
+    {{template "head" .}}
 
     <body class="d-flex flex-column h-100">
     <!-- Begin page content -->
     <main role="main" class="flex-shrink-0">
         <div class="container">
             <div class="mt-3">
-                <p>JoeObarzanek.com</p>
-                <nav aria-label="breadcrumb">
-                    <ol class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="/">Home</a></li>
-                        <li class="breadcrumb-item"><a href="/articles">Articles</a></li>
-                        <li class="breadcrumb-item"><a href="/projects">Projects</a></li>
-                        <li class="breadcrumb-item"><a href="/resume">Resume</a></li>
-                    </ol>
+                <p>JoeObarzanek.com <span class="float-right">... Articles / {{ .Title }}</span></p>
+                <nav class="navbar navbar-expand-lg navbar-light bg-light rounded">
+                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navBarShrink" aria-controls="navBarShrink" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="collapse navbar-collapse" id="navBarShrink">
+                        <ul class="navbar-nav mr-auto">
+                            <li class="nav-item">
+                                <a class="nav-link" href="/">Home</a>
+                            </li>
+                            <li class="nav-item active">
+                                <a class="nav-link" href="/articles">Articles</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="/projects">Projects</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="/resume">Resume</a>
+                            </li>
+                        </ul>
+                    </div>
                 </nav>
             </div>
             <hr>
             <!-- Begin article -->
             <div class="text-center">
-                <p class="lead title">PyTesseract: multithreading vs multiprocessing</p>
+                <p class="lead title">PyTesseract: threading vs multiprocessing</p>
                 <img alt="tesseract_and_python_multi" src="../static/img/articles/jobarzanek_tesseract_python_multi.png">
             </div>
             <div class="mt-2 mb-5">
-                <div class="bg-light rounded">
-                    <p class="text-muted p-2">July 10, 2020<span class="float-right">~10 min</span></p>
-                </div>
+                <p class="text-muted">Added on <u>August 1, 2020</u></p>
+                <p class="mb-1 mt-3 lead font-weight-bold">I. Problem Overview</p>
                 <p>
-                    Recently, I was tasked with optimizing a "Financial Spreading" application at work. In a nutshell,
-                    the application assists the user, a credit analyst, in evaluating the "credit worthiness" of the customer
-                    by extracting data from various financial PDF documents uploaded by the credit analyst.
-                    To do so, the app leverages the open source OCR engine from Google —
+                    Recently, a colleague and I were tasked with optimizing a "Financial Spreading" application at work.
+                    In a nutshell, the application assists the user, a credit analyst, in evaluating the "credit worthiness"
+                    of a customer by extracting various numerical data from the customer's financial documents.
+                    To do so, the application leverages Google's open source OCR engine —
                     <strong><a target="_blank" href="https://github.com/tesseract-ocr/tesseract">Tesseract</a></strong>.
                 </p>
                 <p>
-                    While the app was more than capable of providing insights to the credit analyst, the time
-                    from uploading a PDF to displaying "usable" information from the same PDF was incredibly slow and
-                    impacting downstream credit assessment workflows. The slowness mostly stemmed from how the OCR methods
-                    were implemented within the app — essentially a <code>for</code> loop was iterating over anywhere from 10 to
-                    100 PDF pages and calling a method from the <code>pytesseract</code>
-                    library on each one by one. While this approach was "atomic" and safe from any parallelism
-                    pitfalls like race conditions, the design needed to change in order to improve the app's performance.
+                    While the application was more than capable of providing insights to the user, the time
+                    from uploading the PDF to displaying usable information from the same document was incredibly slow and
+                    impacting downstream credit assessment workflows. The reason for the slowness stemmed from how the
+                    OCR methods were implemented — essentially a <code>for</code> loop was iterating over each page
+                    and calling a method from the <code>pytesseract</code> library one at a time. While this approach
+                    was "atomic" and easily reproducible, it needed to change in order to speed up the credit assessment process.
                 </p>
+                <p class="mb-1 mt-3 lead font-weight-bold">II. Planning</p>
                 <p>
                     If you're familiar with Python's relationship with the GIL, concurrency, and parallelism, then like
-                    me you're first thoughts may have been: "Hmm would <code>threading</code> or <code>multiprocessing</code>
-                    be better here? It seems like OCR is a pretty CPU heavy task. I bet this would be a great opportunity
-                    to leverage true parallelism via the <code>multiprocessing</code> library." After doing a few Google
-                    searches along the lines of <i>"OCR with python pytesseract and multiprocessing"</i>, I came across
-                    pretty solid
-                    <a target="_blank" href="https://appliedmachinelearning.blog/2018/06/30/performing-ocr-by-running-parallel-instances-of-tesseract-4-0-python/">
+                    me you're first thoughts may have been:
+                    <br>
+                    <br>
+                    "What would work better in this scenario: <code>threading</code> or <code>multiprocessing</code>?
+                    At a glance, OCR seems like it's more of a CPU heavy task rather than I/O bound. I bet this would
+                    be a good opportunity to leverage true parallelism and split the work across multiple processes."
+                    <br>
+                    <br>
+                    After googling<i>"OCR with python pytesseract and multiprocessing"</i>, I came across pretty solid
+                    <a style="text-decoration: underline;" target="_blank" href="https://appliedmachinelearning.blog/2018/06/30/performing-ocr-by-running-parallel-instances-of-tesseract-4-0-python/">
                         article</a>
-                    explaining how to implement a multiprocessing pool with pytesseract.
-                    Confident in this approach, I decided to move forward with a convenient "OCRProcessManager" class to handle
-                    dividing and running the OCR pieces of the application in parallel with multiple processes.
+                    explaining how to leverage multiprocessing for OCR with <code>pytesseract</code>.
+                    My colleague and I played around with the example code in the article and eventually agreed
+                    on using this same approach. We eagerly moved along with writing an "OCRProcessPool"
+                    class to handle dividing and running the OCR methods in separate processes within the application.
                 </p>
                 <p>
-                    After writing a decent amount of code, things were working surprisingly well. My code would split a large
-                    list of images into smaller chunks and pass them off to individuals processes to be <i>OCR'd</i> by Tesseract
-                    — and it was much faster! However, the fact that I didn't know how the OCR code was processing images
-                    under the hood really started to bug me. Having a rough understanding of how my python code was
-                    interacting with the Tesseract engine behind the scenes had big implications for the multiprocessing
-                    design. Also, I'll be the first to admit - working with many processes is difficult. Things like logging or even
-                    simple communication between processes needs to be somewhat re-worked when using processes vs threads.
-                    Overall, I reasoned I should at least conduct a small investigation to make sure the multiprocessing
-                    approach was indeed the best way to proceed.
-                </p>
+                    After writing a decent amount of code, things were working surprisingly well. Our "OCRProcessPool"
+                    would split a large list of images into smaller chunks and distribute them to processes within the pool where
+                    they would be <i>OCR'd</i> by Tesseract — and it was much faster than handling each page serially!
+                    However, as we started to add more and more "edge-case" specific code to our new class, things started
+                    getting tricky. For starters, working with processes is a lot more <i>tedious</i> than working with threads.
+                    Things like logging, database connections, and even communication between workers need to be re-worked when
+                    using processes versus threads. Before fully committing to the design, I felt like we should at least conduct
+                    a small investigation to make sure multiprocessing was indeed the superior approach to threading.</p>
                 <p>
-                    To start, I wanted to see if <code>pytesseract</code> was a pure Python or Cython implementation
-                    of Tesseract. Many scientific or computation heavy libraries in Python (NumPy, Pandas, SciPy, etc.)
+                    First, we wanted to find out if <code>pytesseract</code> was a pure Python or Cython adaptation
+                    of Tesseract. For context, many scientific or computation heavy libraries in Python (e.g. NumPy, Pandas, and SciPy)
                     utilize Cython (a C-extension for Python) as a means of leveraging the speed of C with the readability
-                    of Python because Cython has a few tools that allow it to run code without the having to worry about the GIL.
-                    (<a href="https://lbolla.info/python-threads-cython-gil">Overcoming Python's GIL with Cython</a>).
-                    Anyway, I went over to <a href="https://github.com/madmaze/pytesseract">pytesseract's homepage</a>
-                    to check the source code and almost immediately I spotted something interesting — pytesseract is just
-                    a simple Python wrapper around the Tesseract C++ binary invoked via a call to <code>subprocess.Popen()</code> ...
+                    of Python. Cython has a few interesting features that allow it to <a style="text-decoration: underline;" href="https://lbolla.info/python-threads-cython-gil">run code without the having to worry
+                        about the GIL</a>, so many Cython libraries are usually better suited for threading. We went
+                    over to <a style="text-decoration: underline;" href="https://github.com/madmaze/pytesseract">pytesseract's homepage</a>
+                    to check the source code and right away we found that <code>pytesseract</code> is just a simple Python wrapper
+                    around the Tesseract C++ binary invoked via a call to <code>subprocess.Popen()</code> ...
                 </p>
                 <script src="https://gist.github.com/pogzyb/9c5a90a231b8c45ebbda5b85d766da8f.js"></script>
                 <p>
                     By design <code>subprocess.Popen()</code> will open another separate "process" with its own system state,
-                    memory, files, program counter, and a call stack used to hold the local variables of functions for whatever
-                    program is being run. Python's GIL does not span multiple processes, so in theory two separate calls to one
-                    of pytesseract's OCR methods whether called via a thread or process would "run in parallel". The question
-                    I then asked myself was: "Why should I need to run pytesseract in a separate process when it will
-                    just open another process of its own?".
+                    memory, files, program counter, and a call stack used to hold the local variables of whatever
+                    program is being run. Python's GIL does not span multiple processes, so in theory two separate calls
+                    (whether called via separate threads or separate processes) to one of <code>pytesseract</code>'s OCR
+                    methods would "run in parallel". If this was the case, then why should we need to run these calls
+                    in separate processes using <code>multiprocessing</code> when the source code will just go ahead and open another
+                    process of its own?
                 </p>
                 <p>
-                    Next, I discovered that pytesseract will also write (to /tmp) any image you pass to it ...
+                    Another discovery about pytesseract's design was that the image passed to the OCR method was always being
+                    written to out /tmp.
+                    This read and write I/O between pytesseract and the tesseract binary creates some unavoidable latency
+                    that our solution would just have to deal with. I will add that despite these clunky features
+                    <code>pytesseract</code> is a very easy to use library and I can understand why it is so popular.
                 </p>
                 <script src="https://gist.github.com/pogzyb/d97f9853f67a6cf0fef56b48a0819b82.js"></script>
-                <p>
-                    The reading and writing I/O between pytesseract and the tesseract binary creates unavoidable latency.
-                    It wouldn't be reasonable to swap out pytesseract for a different Python Tesseract library at this point
-                    in the application's life, so this was just something I'd have to deal with. Also, for what it's worth
-                    pytesseract is actually a very easy to use library despite some of these clunky features.
-                </p>
                 <div class="rounded bg-light">
                     <h6 class="p-1 mb-0 text-white rounded bg-info">Note:</h6>
                     <p class="p-2">
@@ -111,17 +125,33 @@
                         </small>
                     </p>
                 </div>
+                <p class="mb-1 mt-3 lead font-weight-bold">III. Experiment</p>
                 <p>
-                    With these new finds, I decided it would be a good idea to run a simple experiment to compare threading
-                    and multiprocessing implementations of pytesseract's <code>image_to_data()</code> method. My hypothesis
-                    was "Given that pytesseract utilizes <code>subprocess.Popen()</code>, threads should be able to
-                    outperform processes". Some functions Python interpreter will actually release the GIL and invoking a call to
-                    <code>subprocess.Popen()</code> happens to be one of them. This means that while a .
-                    Another supporting piece of evidence for my hypothesis is the fact that processes are "heavier" than
-                    threads.
+                    Given these discoveries, we wanted to run a simple experiment to compare both threading
+                    and multiprocessing implementations of pytesseract's <code>image_to_data()</code> method.
+                    We hypothesized that threading should perform better than multiprocessing in this scenario for
+                    a few reasons.
+                </p>
+                <p>
+                    The first reason has to due with I/O blocking.
+                    <a style="text-decoration: underline;" target="_blank" href="https://opensource.com/article/17/4/grok-gil">
+                    The GIL's affect on threading can be simplified into one phrase: "One thread runs Python,
+                        while N others sleep or await I/O".
+                    </a>
+                    Normally, the Python 3 interpreter waits 5 microseconds before "saving" and "switching" threads.
+                    In this case, because the <code>pytesseract</code> method is just opening a subprocess and
+                    then waiting for its completion, the interpreter is actually capable of prematurely releasing the GIL.
+                    This means that our subprocesses are efficiently created and then "swapped" for other non-I/O waiting threads.
+                    As a side note, there many I/O instances when the Python interpreter will release the GIL, and
+                    They are extremely useful to know about especially when dealing with concurrency in Python.
+                </p>
+                <p>
+                    The second reason is that processes are "heavier" than threads. As mentioned earlier, a process
+                    maintains its own isolated memory space from the "parent" process. On the other hand, threads share
+                    the same memory space.
                 </p>
                 <div class="rounded bg-light">
-                    <h6 class="p-1 mb-0 text-white rounded bg-secondary">Workstation Specs:</h6>
+                    <h6 class="p-1 mb-0 text-white rounded bg-secondary">Workstation Specs for this Experiment:</h6>
                     <p class="p-2">
                         <small>
                         Model: Dell XPS 13 9350<br>
@@ -132,19 +162,101 @@
                     </p>
                 </div>
                 <p>
-                    I gathered a dataset of 128 PDF images that I'd feed to a pretty simple python script.
+                    After gathering a dataset of 150 images, we created a simple script that could be configured to run
+                    the OCR method in either threads or processes using a <code>concurrent.futures</code> Executer Pool.
                 </p>
-
-                <p>A good visual of the differences between running threads vs processes is depicted in the images below. </p>
-                <img alt="tesseract_and_python_multi" class="w-100" src="../static/img/articles/processing-tesseract.png">
-                <p></p>
-                <img alt="tesseract_and_python_multi" class="w-100" src="../static/img/articles/threading-tesseract.png">
-                <p>The results were surprising</p>
-                <img alt="tesseract_and_python_multi" class="w-100" src="../static/img/articles/comparison.png">
-                <p>The next challenge I have to tackle is finding</p>
+                <p>Each run would have different combination of values for these variables:</p>
+                    <ul>
+                        <li>
+                            <p class="mb-0">
+                                <code>num_workers</code>
+                                <small>: The number of threads or processes in the pool.</small>
+                            </p>
+                        </li>
+                        <li>
+                            <p class="mb-0">
+                                <code>num_chunks</code>
+                                <small>: The images will be broken down into smaller "num_chunks" lists of images</small>
+                            </p>
+                        </li>
+                        <li>
+                            <p class="mb-0">
+                                <code>chunk_size</code>
+                                <small>: The number of images to include in each smaller "chunk" from the main list
+                                    of images. If chunk_size = 0, then each worker will receive a
+                                    single image at a time.
+                                </small>
+                            </p>
+                        </li>
+                    </ul>
+                <p>
+                    <script src="https://gist.github.com/pogzyb/12ebca9c9e54ee6a1f04c3a3a2084302.js"></script>
+                </p>
+                <p>
+                    The following screenshots are a good way to illustrate the difference between using
+                    threading and multiprocessing.
+                </p>
+                <div class="rounded bg-dark">
+                    <img alt="tesseract_and_python_multi" class="p-2 w-100" src="../static/img/articles/processing-tesseract.png">
+                </div>
+                <p class="mt-2">
+                    In the image above, the script leverages a <code>ProcessPoolExecutor</code> to start 8 different processes. Each of
+                    those processes is a "fork" of the original python script, so the process "python parallel_pytesseract.py"
+                    shows up 9 different times (8 new processes and the original "parent" process) as well as 8 separate calls
+                    to tesseract from each "child" process.
+                </p>
+                <p>
+                    In the image below, however, the script leverages a <code>ThreadPoolExecutor</code> to start and distribute work
+                    across 8 different threads. Each of these threads shares the same memory space as the "parent" process, so
+                    unlike the processes image above, there is only one "python threading_pytesseract.py" process going, but
+                    still 8 separate calls to tesseract from each thread.
+                </p>
+                <div class="rounded bg-dark">
+                    <img alt="tesseract_and_python_multi" class="p-2 w-100" src="../static/img/articles/threading-tesseract.png">
+                </div>
+                <p class="mb-1 mt-3 lead font-weight-bold">IV. Conclusion</p>
+                <p>
+                    Overall, the performance of threading and processing for pytesseract's image_to_data method were
+                    very similar. The graph below shows the time break downs between threads and processes when calling
+                    pytesseract methods. In the end, my colleague and I decided to utilize a thread pool given how much easier
+                    they would be to implement in the application's current ecosystem. When thinking about solutions to problems that
+                    require concurrency or parallelism, it's important to know exactly what the underlying code you're
+                    attempting to distribute is doing.
+                    In other words, successfully utilizing threads or processes in Python depends on the task at hand.
+                    In the case of <code>pytesseract</code>, my colleague and I were able to identify the problem, explore
+                    a hypothesis, and find evidence that to support our assumption.
+                </p>
+                <div class="rounded bg-light mt-2">
+                    <img alt="tesseract_and_python_multi" class="p-2 w-100" src="../static/img/articles/comparison.png">
+                </div>
+                <div class="mt-2 rounded bg-light">
+                    <h6 class="p-1 mb-0 text-white rounded bg-dark">References:</h6>
+                    <p class="p-2 mb-0">
+                        <small>Here are some resources on threads, processes, and the GIL:</small>
+                    </p>
+                    <ul class="mt-0">
+                        <li>
+                            <p class="mb-0">
+                                <small>https://www.codeproject.com/Questions/218217/How-to-decide-ideal-number-of-threads</small>
+                            </p>
+                        </li>
+                        <li>
+                            <p class="mb-0">
+                                <small>https://docs.python.org/3.7/library/concurrent.futures.html</small>
+                            </p>
+                        </li>
+                        <li>
+                            <p class="mb-0">
+                                <small>https://opensource.com/article/17/4/grok-gil</small>
+                            </p>
+                        </li>
+                    </ul>
+                </div>
             </div>
+            <hr>
         </div>
     </main>
+    {{template "footer"}}
     {{template "js"}}
     </body>
 
