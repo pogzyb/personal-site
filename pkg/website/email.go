@@ -26,7 +26,7 @@ func sendEmail(subject string, serverError error, stacktrace string) {
 		Source: aws.String("alerts@joeobarzanek.com"),
 		Destination: &ses.Destination{
 			ToAddresses: []*string{
-				aws.String(os.Getenv("Email500Recipient")),
+				aws.String(os.Getenv("EMAIL_500")),
 			},
 		},
 		Message: &ses.Message{

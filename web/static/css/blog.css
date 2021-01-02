@@ -1,7 +1,19 @@
-/* Custom CSS
-        -------------------------------------------------- */
+/*
+--------------------------------------------------
+Custom CSS
+--------------------------------------------------
+*/
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'Open Sans', sans-serif;
+}
+
+p, a, li {
+    font-family: 'Lato', sans-serif !important;
+}
+
 a {
-    color: #011010 !important;
+    color: #13396a !important;
 }
 
 .title {
@@ -10,7 +22,7 @@ a {
 
 .container {
     width: auto;
-    max-width: 680px;
+    max-width: 880px;
     padding: 0 15px;
 }
 
@@ -29,7 +41,7 @@ a {
 }
 
 .navbar-nav .active a::after {
-    border-bottom: 5px solid #444;
+    border-bottom: 5px solid #13396a;
     bottom: -7.5px;
     content: " ";
     left: 0;
