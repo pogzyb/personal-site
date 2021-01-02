@@ -2,28 +2,25 @@
 version: '3.5'
 
 services:
-  personal-site-dev:
+  website-dev:
     build:
       context: .
       dockerfile: build/dev/Dockerfile
-    container_name: personal-site-dev
+    container_name: website-dev
     env_file:
       - vars.env
     ports:
       - '8080:8080'
     volumes:
-      - './website/templates:/website/templates:z'
-      - './website/static:/website/static:z'
-      - './website/data:/website/data:z'
-      - './main.go:/website/main.go:z'
-      - './runner.conf:/website/runner.conf:z'
+      - './pkg/website:/go/src/pogzyb/website:z'
+      - './web:/app/web:z'
 
-#  personal-site-aws:
-#    build:
-#      context: .
-#      dockerfile: build/aws/Dockerfile
-#    container_name: personal-site-aws
-#    env_file:
-#      - vars.env
-#    ports:
-#      - '8080:8080'
+  website-aws:
+    build:
+      context: .
+      dockerfile: build/aws/Dockerfile
+    container_name: website-aws
+    env_file:
+      - vars.env
+    ports:
+      - '8080:8080'
