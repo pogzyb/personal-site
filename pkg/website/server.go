@@ -35,7 +35,8 @@ func New() *Site {
 
 func initRouter() *httprouter.Router {
 	router := httprouter.New()
-	router.ServeFiles("/static/*filepath", http.Dir("static"))
+	staticDir := os.Getenv("STATIC_DIR")
+	router.ServeFiles("/static/*filepath", http.Dir(staticDir))
 	router.NotFound = http.HandlerFunc(NotFoundHandler)
 	router.PanicHandler = InternalServerError
 	return router
@@ -44,7 +45,6 @@ func initRouter() *httprouter.Router {
 func initTemplates() {
 	var templateFiles []string
 	templatesDir := os.Getenv("TEMPLATES_DIR")
-	// read and parse template files
 	files, err := ioutil.ReadDir(templatesDir)
 	if err != nil {
 		log.Fatalf("could not read from $TEMPLATES_DIR [%s]: %v", templatesDir, err)
