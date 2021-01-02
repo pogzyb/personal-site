@@ -39,18 +39,14 @@ type (
 	}
 )
 
-func initDatabase() *gorm.DB {
+func initDatabase() {
 	once.Do(func() {
 		var err error
-		dbName := os.Getenv("DATABASE_NAME")
-		dbDir := os.Getenv("APP_HOME") + "/data"
-		database, err = gorm.Open(sqlite.Open(path.Join(dbDir, dbName)), &gorm.Config{})
+		database, err = gorm.Open(sqlite.Open(":memory:"), &gorm.Config{})
 		if err != nil {
-			log.Fatalf("could not connect to %s: %v", dbName, err)
+			log.Fatalf("could not connect to database: %v", err)
 		}
-		log.Printf("successfully connected to %s\n", dbName)
 	})
-	return database
 }
 
 func migrateDatabase() {
@@ -62,22 +58,24 @@ func migrateDatabase() {
 	populateProjects()
 }
 
+
+// todo: DRY out "populate" code
 func populateArticles() {
 	// check if database is empty
 	var article Article
 	result := database.First(&article)
 
 	if result.RowsAffected == 0 {
-		// struct for marshalling the "articles" json file
+		// struct for marshalling articles from json file
 		var data = struct {
 			Articles []Article `json:"articles"`
 		}{}
-		// read in data/articles.json file
-		cwd, _ := os.Getwd()
-		jsonFile := path.Join(cwd, "data/articles.json")
-		f, err := os.Open(jsonFile)
+		articlesDir := os.Getenv("DATA_DIR")
+		articlesFile := os.Getenv("ARTICLES_FILENAME")
+		fileLocation := path.Join(articlesDir, articlesFile)
+		f, err := os.Open(fileLocation)
 		if err != nil {
-			log.Fatalf("could not open json file [%s]: %v", jsonFile, err)
+			log.Fatalf("could not open json file [%s]: %v", fileLocation, err)
 		}
 		defer f.Close()
 		// marshal the results into "data", which is a slice of "Article" types
@@ -100,16 +98,17 @@ func populateProjects() {
 	result := database.First(&project)
 
 	if result.RowsAffected == 0 {
-		// struct for marshalling the "articles" json file
+		// struct for marshalling the json file
 		var data = struct {
 			Projects []Project `json:"projects"`
 		}{}
-		// read in data/projects.json file
-		cwd, _ := os.Getwd()
-		jsonFile := path.Join(cwd, "data/projects.json")
-		f, err := os.Open(jsonFile)
+		// read in projects data from file
+		projectsDir := os.Getenv("DATA_DIR")
+		projectsFile := os.Getenv("PROJECTS_FILENAME")
+		fileLocation := path.Join(projectsDir, projectsFile)
+		f, err := os.Open(fileLocation)
 		if err != nil {
-			log.Fatalf("could not open json file [%s]: %v", jsonFile, err)
+			log.Fatalf("could not open json file [%s]: %v", fileLocation, err)
 		}
 		defer f.Close()
 		// marshal the results into "data", which is a slice of "Project" types
