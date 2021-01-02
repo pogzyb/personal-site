@@ -1,53 +1,53 @@
 {{ define "projects" }}
 
-    <!DOCTYPE html>
-    <html lang="en">
+<!DOCTYPE html>
+<html lang="en">
 
-    {{template "head" .}}
+{{template "head" .}}
 
-    <body class="d-flex flex-column h-100">
+<body class="d-flex flex-column h-100">
     <!-- Begin page content -->
-    <main role="main" class="mt-3 mb-5 container flex-shrink-0">
-            <p>JoeObarzanek.com <span class="float-right">... {{ .Title }}</span></p>
-            <nav class="navbar navbar-expand-lg navbar-light bg-light">
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navBarShrink" aria-controls="navBarShrink" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="collapse navbar-collapse" id="navBarShrink">
-                    <ul class="navbar-nav mr-auto">
-                        <li class="nav-item">
-                            <a class="nav-link" href="/">Home</a>
-                        </li>
-                        <!--
-                        <li class="nav-item">
-                            <a class="nav-link" href="/journal">Journal</a>
-                        </li>
-                        -->
-                        <li class="nav-item active">
-                            <a class="nav-link" href="/projects">Projects</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="/resume">Resume</a>
-                        </li>
-                    </ul>
-                </div>
-            </nav>
-            <hr>
-            <div class="p-2">
-                <p class="lead mb-0">Some projects I can share...</p>
+    <main role="main" class="mt-3 mb-5 container flex-shrink-0 w-100">
+        <p>JoeObarzanek.com <span class="float-right">... {{ .Title }}</span></p>
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navBarShrink" aria-controls="navBarShrink" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navBarShrink">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/">Home</a>
+                    </li>
+                    <!--
+                    <li class="nav-item">
+                        <a class="nav-link" href="/journal">Journal</a>
+                    </li>
+                    -->
+                    <li class="nav-item active">
+                        <a class="nav-link" href="/projects">Projects</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/resume">Resume</a>
+                    </li>
+                </ul>
             </div>
-            {{ range $project := .Projects }}
-                <a href="{{ $project.Link }}" style="text-decoration: none;" target="_blank">
-                <div class="card mt-3 shadow-sm">
-                    <div class="card-body bg-light">
-                        <h5 class="card-title">{{ $project.Title }}<i class="float-right fas fa-external-link-alt"></i></h5>
-                        <h6 class="card-subtitle mb-2 text-muted">{{ $project.Description }}</h6>
-                        <p class="card-text">
-                            {{ $project.Body }}
-                        </p>
-                    </div>
+        </nav>
+        <hr>
+        <div class="p-2">
+            <p class="lead mb-0">Some projects I can share...</p>
+        </div>
+        {{ range $project := .Projects }}
+            <a href="{{ $project.Link }}" style="text-decoration: none;" target="_blank">
+            <div class="card mt-3 shadow-sm">
+                <div class="card-body bg-light">
+                    <h5 class="card-title">{{ $project.Title }}<i class="float-right fas fa-external-link-alt"></i></h5>
+                    <h6 class="card-subtitle mb-2 text-muted">{{ $project.Description }}</h6>
+                    <p class="card-text">
+                        {{ $project.Body }}
+                    </p>
                 </div>
-                </a>
+            </div>
+            </a>
         {{ end }}
     </main>
     {{template "footer"}}
