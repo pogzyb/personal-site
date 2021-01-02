@@ -7,9 +7,9 @@
 
 <body class="d-flex flex-column h-100">
     <!-- Begin page content -->
-    <main role="main" class="container w-100 mt-3">
+    <main role="main" class="container w-100 mt-3 mb-5">
         <p>JoeObarzanek.com <span class="float-right">... {{ .Title }}</span></p>
-        <nav class="navbar navbar-expand-lg navbar-light bg-light rounded">
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navBarShrink" aria-controls="navBarShrink" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -18,9 +18,11 @@
                     <li class="nav-item">
                         <a class="nav-link" href="/">Home</a>
                     </li>
+                    <!--
                     <li class="nav-item">
                         <a class="nav-link" href="/articles">Articles</a>
                     </li>
+                    -->
                     <li class="nav-item">
                         <a class="nav-link" href="/projects">Projects</a>
                     </li>
@@ -30,10 +32,10 @@
                 </ul>
             </div>
         </nav>
-        <div class="my-3 p-3 rounded border">
+        <div class="my-3 p-3 border shadow-sm">
             <!-- Header -->
             <p class="text-dark text-center" style="font-size: 2.0rem; margin-bottom: 0;">
-                Joe Obarzanek
+                Joseph Obarzanek
             </p>
             <p class="text-center text-muted"><small>pogzyb@umich.edu · Ann Arbor, Michigan · github.com/pogzyb</small></p>
             <hr>
@@ -74,6 +76,7 @@
             <br>
             <!-- Experience -->
             <h5 class="border-bottom border-gray pb-2 mb-0">Experience</h5>
+
             <div class="media text-muted pt-3">
                 <img alt="co-logo" class="mr-2 rounded" src="../static/img/resume/co-logo.png" width="32" height="32">
                 <div class="media-body pb-3 mb-0 small lh-125 border-bottom border-gray">
@@ -88,24 +91,25 @@
                         <strong class="text-gray-dark">Digital Marketing Software Engineer</strong>
                         <ul>
                             <li>Develop a full-stack web application aimed at identifying, tracking, and rewarding customers enrolled in online promotional offers</li>
-                            <li>Utilize Python's Flask web framework, Apache Airflow, and AWS Services to build a highly visible, end-to-end Data Pipeline</li>
+                            <li>Utilize Python's Flask web framework, Apache Airflow, and AWS Services to build a highly available, end-to-end Data Pipeline</li>
                             <li>Work with marketing teams and other developers to create and adjust application features in order to meet evolving requirements</li>
                         </ul>
-                        <strong class="text-gray-dark">Financial Spreading Software Engineer</strong>
+                        <strong class="text-gray-dark">Credit & Lending Software Engineer</strong>
                         <ul>
                             <li>Contribute to a project aimed at automating the bank's Financial Spreading process by leveraging advanced Deep Learning and Optical Character Recognition techniques</li>
+                            <li>Create training and hyperparameter tuning jobs using AWS SageMaker to quickly develop Machine Learning models</li>
                             <li>Write highly optimized Python code to efficiently process customer financial data extracted from large PDF documents</li>
                             <li>Regularly meet with Business Partners and Lead Users to document feedback, address application issues, and deliver features</li>
                         </ul>
                         <strong class="text-gray-dark">Enterprise Data Lake Engineer</strong>
                         <ul>
-                            <li>Leverage Apache Airflow and AWS Services such as Lambda, SNS, and Glue to build scalable, robust, and re-usable Big Data Pipelines</li>
+                            <li>Leverage Apache Airflow DAGs and AWS Services such as Lambda, SNS, and Glue to build scalable, robust, and re-usable Big Data Pipelines</li>
                             <li>Develop Python microservices to insert, query, and update metadata from various internal banking mainframe databases</li>
                             <li>Utilize Terraform and IaC best practices to deploy various containerized applications into AWS' Elastic Container Service</li>
                         </ul>
                         <strong class="text-gray-dark">Cyber Security Data Analyst</strong>
                         <ul>
-                            <li>Parse terabytes of corporate network traffic to identify information security threats using anomaly detection methods with PySpark</li>
+                            <li>Develop AWS Glue PySpark scripts to parse terabytes of corporate network traffic for audit and anomaly detection purposes</li>
                             <li>Perform operational reporting duties including preparing statistical reports to be shared with Security Management and Audit teams</li>
                             <li>Work closely with internal and external Information Security Experts and Threat Hunters to quickly act on pieces of cyber intelligence</li>
                         </ul>
@@ -229,34 +233,12 @@
                     </div>
                 </div>
             </div>
-            <ul style="padding-left: 5px;">
-                            <li><strong class="text-gray-dark">Digital Marketing Software Engineer</strong></li>
-                            <ul>
-                                <li>Develop a full-stack web application aimed at identifying and tracking online promotional offers</li>
-                                <li>Utilize Python's Flask web framework, Terraform, and AWS Services to build a containerized, cloud-native application</li>
-                                <li>Work with marketing teams and other developers to create and adjust application features in order to meet evolving requirements</li>
-                            </ul>
-                            <li><strong class="text-gray-dark">Enterprise Data Lake Engineer</strong></li>
-                            <ul>
-                                <li>Leverage PySpark, Apache Airflow, and AWS Glue to build scalable, robust, and re-usable big data pipelines</li>
-                                <li>Develop Python API services to query and document metadata from various internal banking mainframe databases</li>
-                                <li>Utilize Terraform and IaC best practices to deploy various applications into AWS' Elastic Container Service</li>
-                            </ul>
-                            <li><strong class="text-gray-dark">Cyber Security Data Analyst</strong></li>
-                            <ul>
-                                <li>Parse terabytes of network data to identify potential information security threats using ad-hoc PySpark</li>
-                                <li>Put together simplified reports using Jupyter Notebooks to be shared with Security Management and Audit teams</li>
-                                <li>Work with Fraud Analysts to build re-usable </li>
-                            </ul>
-                        </ul>
             -->
-            <br>
         </div>
     </main>
     {{template "footer"}}
     {{template "js"}}
+
 </body>
-
-    </html>
-
+</html>
 {{ end }}

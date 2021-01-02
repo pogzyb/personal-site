@@ -3,7 +3,6 @@ package website
 import (
 	"fmt"
 	"github.com/julienschmidt/httprouter"
-	"html/template"
 	"log"
 	"net/http"
 	"runtime/debug"

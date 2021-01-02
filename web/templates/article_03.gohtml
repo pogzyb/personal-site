@@ -41,10 +41,30 @@
             </div>
             <div class="mt-2 mb-5">
                 <p class="text-muted">Added on <u>July 10, 2020</u></p>
-                <p class="mb-0 lead heading">I. Preface</p>
+                <p class="mb-0 lead font-weight-bold">I. Preface</p>
                 <p>
-                    The worlds of Cyber Security and Big Data have been on a collision course since the early days.
-                    
+                    As a Data Science fanatic, I'm always looking for new, unusual, or interesting areas to
+                    apply statistical or machine learning methodologies. One space that has had my attention for the
+                    past few years is the world of CyberSecurity. The power of AI/ML has vastly altered traditional
+                    CyberSecurity practices in the past decade. Old school Blacklists, Spam filters, and regex based
+                    Data Loss Prevention tools are being re-vamped with more intelligent, data-centric programs using
+                    everything from Natural Language Processing to Anomaly Detection and Clustering. In this series of
+                    articles, we will explore network traffic monitoring, and ultimately, attempt to build an end-to-end
+                    security data pipeline using Go, raspberry pi, AWS Glue, and Apache Superset.
+                </p>
+                <p class="mb-0 lead font-weight-bold">II. Project Overview</p>
+                <p>
+                    This project is going to be broken down into multiple parts. First, we will set up a simple PCAP
+                    sniffer using Go and install it onto a raspberry pi. This sniffer will capture traffic from your home network,
+                    save it to a file, and then send push it into an S3 bucket in AWS. Once we have a consistent flow of
+                    network data coming into the cloud, we'll use AWS Glue to clean, transform, and save it into an analytics-friendly format.
+                    Finally, we will set up an instance of Apache Superset to make some awesome dashboards to display our data pipeline
+                    and check out some ways to detect anomalies.
+                </p>
+                <p class="mb-0 lead font-weight-bold">III. Gathering Data (Part I)</p>
+                <p>
+                    So, before we can start making cool graphs and exploring anomaly detection methods, we need data.
+                    If you don't already, make sure you have Go 1.1x installed.
                 </p>
             </div>
         </div>

@@ -1,0 +1,39 @@
+{
+  "projects": [
+    {
+      "title": "asyncwhois",
+      "fa_icon": "fas fa-globe",
+      "description": "WHOIS module for Python 3.7 (asyncio compatible)",
+      "body": "",
+      "link": "https://github.com/pogzyb/asyncwhois"
+    },
+    {
+      "title": "Building Cloud Ready Applications with Localstack",
+      "fa_icon": "fas fa-layer-group",
+      "description": "Sample application that utilizes AWS services locally via Localstack",
+      "body": "",
+      "link": "https://github.com/pogzyb/wiki-scraper-using-localstack"
+    },
+    {
+      "title": "DeepSurf",
+      "fa_icon": "fas fa-fish",
+      "description": "Real-time Phishing Detection using Machine Learning",
+      "body": "Cybersecurity & Data Science application that tries to predict whether or not the given URL is \"phishy\" or malicious.",
+      "link": "https://deep.surf"
+    },
+    {
+      "title": "Deploying Flask Apps into AWS ECS with Terraform",
+      "fa_icon": "fas fa-cloud-upload-alt",
+      "description": "Tutorial for deploying containerized apps into AWS using the IaC tool, Terraform",
+      "body": "",
+      "link": "https://github.com/pogzyb/deploy-flask-into-aws-with-terraform"
+    },
+    {
+      "title": "PySpark 101: Capital BikeShare Case Study",
+      "fa_icon": "fas fa-bicycle",
+      "description": "Machine Learning & Data Science project utilizing AWS EMR and PySpark ML",
+      "body": "",
+      "link": "https://github.com/pogzyb/pyspark-aws-example"
+    }
+  ]
+}

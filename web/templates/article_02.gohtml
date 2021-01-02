@@ -129,8 +129,10 @@
                 <p>
                     Given these discoveries, we wanted to run a simple experiment to compare both threading
                     and multiprocessing implementations of pytesseract's <code>image_to_data()</code> method.
-                    We hypothesized that threading should perform better than multiprocessing in this scenario for
-                    a few reasons.
+                    We knew that either way, a call to "subprocess" was going to be invoked by the underlying
+                    pytesseract code, so our hypothesis was that difference in execution times between threading
+                    and multiprocessing would be negligible. However, we also reasoned that threading could be
+                    slightly more performant for a few reasons.
                 </p>
                 <p>
                     The first reason has to due with I/O blocking.
@@ -147,8 +149,9 @@
                 </p>
                 <p>
                     The second reason is that processes are "heavier" than threads. As mentioned earlier, a process
-                    maintains its own isolated memory space from the "parent" process. On the other hand, threads share
-                    the same memory space.
+                    maintains its own isolated memory space from the "parent" process and even has its own interpreter.
+                    On the other hand, threads are much lighter, because they share the same memory space and interpreter.
+                    The extra time to "warm-up" a process should ultimately give threading an edge.
                 </p>
                 <div class="rounded bg-light">
                     <h6 class="p-1 mb-0 text-white rounded bg-secondary">Workstation Specs for this Experiment:</h6>
@@ -162,8 +165,8 @@
                     </p>
                 </div>
                 <p>
-                    After gathering a dataset of 150 images, we created a simple script that could be configured to run
-                    the OCR method in either threads or processes using a <code>concurrent.futures</code> Executer Pool.
+                    After gathering a dataset of roughly 250 images, we created a simple script that could be configured to run
+                    the OCR method in either threads or processes using a <code>concurrent.futures</code> executor pool.
                 </p>
                 <p>Each run would have different combination of values for these variables:</p>
                     <ul>
@@ -175,17 +178,8 @@
                         </li>
                         <li>
                             <p class="mb-0">
-                                <code>num_chunks</code>
-                                <small>: The images will be broken down into smaller "num_chunks" lists of images</small>
-                            </p>
-                        </li>
-                        <li>
-                            <p class="mb-0">
-                                <code>chunk_size</code>
-                                <small>: The number of images to include in each smaller "chunk" from the main list
-                                    of images. If chunk_size = 0, then each worker will receive a
-                                    single image at a time.
-                                </small>
+                                <code>num_images</code>
+                                <small>: The number of images to invoke the OCR method</small>
                             </p>
                         </li>
                     </ul>
@@ -196,39 +190,53 @@
                     The following screenshots are a good way to illustrate the difference between using
                     threading and multiprocessing.
                 </p>
-                <div class="rounded bg-dark">
-                    <img alt="tesseract_and_python_multi" class="p-2 w-100" src="../static/img/articles/processing-tesseract.png">
-                </div>
+                <figure class="figure">
+                    <img src="../static/img/articles/processing-tesseract.png" class="figure-img img-fluid rounded" alt="A generic square placeholder image with rounded corners in a figure.">
+                    <figcaption class="figure-caption">Fig 1. Using multiprocessing in a Python script</figcaption>
+                </figure>
                 <p class="mt-2">
-                    In the image above, the script leverages a <code>ProcessPoolExecutor</code> to start 8 different processes. Each of
+                    In Figure 1 above, the script leverages a <code>ProcessPoolExecutor</code> to start 8 different processes. Each of
                     those processes is a "fork" of the original python script, so the process "python parallel_pytesseract.py"
                     shows up 9 different times (8 new processes and the original "parent" process) as well as 8 separate calls
                     to tesseract from each "child" process.
                 </p>
                 <p>
-                    In the image below, however, the script leverages a <code>ThreadPoolExecutor</code> to start and distribute work
+                    In Figure 2 below, however, the script leverages a <code>ThreadPoolExecutor</code> to start and distribute work
                     across 8 different threads. Each of these threads shares the same memory space as the "parent" process, so
                     unlike the processes image above, there is only one "python threading_pytesseract.py" process going, but
                     still 8 separate calls to tesseract from each thread.
                 </p>
-                <div class="rounded bg-dark">
-                    <img alt="tesseract_and_python_multi" class="p-2 w-100" src="../static/img/articles/threading-tesseract.png">
-                </div>
+                <figure class="figure">
+                    <img src="../static/img/articles/threading-tesseract.png" class="figure-img img-fluid rounded" alt="A generic square placeholder image with rounded corners in a figure.">
+                    <figcaption class="figure-caption">Fig 2. Using threading in a Python script</figcaption>
+                </figure>
                 <p class="mb-1 mt-3 lead font-weight-bold">IV. Conclusion</p>
                 <p>
-                    Overall, the performance of threading and processing for pytesseract's image_to_data method were
-                    very similar. The graph below shows the time break downs between threads and processes when calling
-                    pytesseract methods. In the end, my colleague and I decided to utilize a thread pool given how much easier
-                    they would be to implement in the application's current ecosystem. When thinking about solutions to problems that
-                    require concurrency or parallelism, it's important to know exactly what the underlying code you're
-                    attempting to distribute is doing.
-                    In other words, successfully utilizing threads or processes in Python depends on the task at hand.
-                    In the case of <code>pytesseract</code>, my colleague and I were able to identify the problem, explore
-                    a hypothesis, and find evidence that to support our assumption.
+                    Figure 3 below depicts the different execution times between threading and multiprocessing. As expected,
+                    the performances of threading and multiprocessing on pytesseract's <code>image_to_data()</code>
+                    method were very similar given that code is simply invoking the underlying C++ via a subprocess call.
+                    One interesting observation was how drastically execution time increased after bumping the number
+                    of threads or processes from 8 or 16 up to 32.
+                    At this point, the program actually performed worse than the serial implementation.
+                    In these cases, there's simply not enough "hardware" for either the threads or processes to share, so they
+                    end up choking out one another.
                 </p>
-                <div class="rounded bg-light mt-2">
-                    <img alt="tesseract_and_python_multi" class="p-2 w-100" src="../static/img/articles/comparison.png">
-                </div>
+                <p>
+                    Overall, my colleague and I decided to utilize a thread pool given the expected performance increase
+                    and due to how much easier it would be to implement in the application's current ecosystem. More importantly,
+                    we learned that when thinking about solutions to problems that require concurrency or parallelism,
+                    it's important to know exactly what the underlying code you're attempting to distribute is doing.
+                    In other words, successfully utilizing threading or multiprocessing
+                    in Python depends on the task at hand. In the case of <code>pytesseract</code>, my colleague and I were
+                    able to identify the problem, conduct an experiment, gather evidence to support our assumption, and learn
+                    some cool and useful information about concurrency in Python along the way.
+                </p>
+                <figure class="figure">
+                    <img src="../static/img/articles/tesseract_comparison.png" class="figure-img img-fluid rounded" alt="A generic square placeholder image with rounded corners in a figure.">
+                    <figcaption class="figure-caption">Fig 3. Time vs. Number of Images with threads and processes</figcaption>
+                </figure>
+
+
                 <div class="mt-2 rounded bg-light">
                     <h6 class="p-1 mb-0 text-white rounded bg-dark">References:</h6>
                     <p class="p-2 mb-0">
@@ -253,7 +261,6 @@
                     </ul>
                 </div>
             </div>
-            <hr>
         </div>
     </main>
     {{template "footer"}}
