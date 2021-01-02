@@ -2,10 +2,10 @@ package website
 
 import (
 	"github.com/julienschmidt/httprouter"
-	"net/http"
 	"html/template"
 	"io/ioutil"
 	"log"
+	"net/http"
 	"os"
 	"path"
 )
@@ -23,7 +23,7 @@ func init() {
 	migrateDatabase()
 }
 
-func NewSite() *Site {
+func New() *Site {
 	site := Site{Router: initRouter()}
 	site.Router.GET("/", site.index)
 	site.Router.GET("/resume", site.resume)
